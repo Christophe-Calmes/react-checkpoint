@@ -39,11 +39,14 @@ someCupcakes.push(
 
 function CupcakeList() {
   // Step 1: get all cupcakes
-  const getAPIRequest = "http://localhost:3310/cupcakes";
-  const [allCupCake, setAllCupCake] = useState({});
-  const GetAllCupCakes = async () => {
+  const getAPIRequestCupCake = "http://localhost:3310/cupcakes";
+  const getAPIRequestAccessories = "http://localhost:3310/accessories";
+
+  const [allCupCake, setAllCupCake] = useState([]);
+  const [accessories, setAccessories] = useState([]);
+  const GetAPI = async (request) => {
     try {
-      const response = await fetch(getAPIRequest);
+      const response = await fetch(request);
       if (response.status === 200) {
         const data = await response.json();
         return data;
@@ -54,15 +57,21 @@ function CupcakeList() {
     }
   };
   useEffect(() => {
-    const fetchData = async () => {
-      const cupcakesData = await GetAllCupCakes();
+    const fetchDataCupCake = async () => {
+      const cupcakesData = await GetAPI(getAPIRequestCupCake);
       setAllCupCake(cupcakesData);
     };
-    fetchData();
+    fetchDataCupCake();
   }, []);
-  console.info(allCupCake);
   // Step 3: get all accessories
-
+  useEffect(() => {
+    const fetcheDataAccessories = async () => {
+      const accessoriesData = await GetAPI(getAPIRequestAccessories);
+      setAccessories(accessoriesData);
+    }
+    fetcheDataAccessories();
+  }, []);
+  console.info(accessories);
   // Step 5: create filter state
 
   return (
@@ -79,11 +88,14 @@ function CupcakeList() {
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {/* Step 2: repeat this block for each cupcake */}
+        {/* Step 2: repeat this block for each cupcake */
+          allCupCake.map((element, index) => (
+            <li className="cupcake-item" key={element + index}>
+              <Cupcake data={element} />
+          </li>
+          ))
+        }
         {/* Step 5: filter cupcakes before repeating */}
-        <li className="cupcake-item">
-          <Cupcake />
-        </li>
         {/* end of block */}
       </ul>
     </>
