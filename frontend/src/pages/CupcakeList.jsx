@@ -1,4 +1,5 @@
 import Cupcake from "../components/Cupcake";
+import { useEffect, useState } from 'react';
 
 /* ************************************************************************* */
 const someCupcakes = [];
@@ -38,7 +39,28 @@ someCupcakes.push(
 
 function CupcakeList() {
   // Step 1: get all cupcakes
-
+  const getAPIRequest = "http://localhost:3310/cupcakes";
+  const [allCupCake, setAllCupCake] = useState({});
+  const GetAllCupCakes = async () => {
+    try {
+      const response = await fetch(getAPIRequest);
+      if (response.status === 200) {
+        const data = await response.json();
+        return data;
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return {};
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const cupcakesData = await GetAllCupCakes();
+      setAllCupCake(cupcakesData);
+    };
+    fetchData();
+  }, []);
+  console.info(allCupCake);
   // Step 3: get all accessories
 
   // Step 5: create filter state
