@@ -64,16 +64,11 @@ function CupcakeList() {
       setAllCupCake(cupcakesData);
     };
     fetchDataCupCake();
-  }, []);
-  // Step 3: get all accessories
-  useEffect(() => {
     const fetcheDataAccessories = async () => {
       const accessoriesData = await GetAPI(getAPIRequestAccessories);
       setAccessories(accessoriesData);
     };
     fetcheDataAccessories();
-  }, []);
-  useEffect(() => {
     if (mesh != 0) {
       setMeshCupCake(
         allCupCake.filter((element) => element.accessory_id === mesh)
@@ -82,7 +77,6 @@ function CupcakeList() {
       setMeshCupCake(allCupCake);
     }
   }, [mesh]);
-  // Step 5: create filter state
   return (
     <>
       <h1>My cupcakes</h1>
