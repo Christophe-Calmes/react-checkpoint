@@ -1,5 +1,5 @@
 import Cupcake from "../components/Cupcake";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /* ************************************************************************* */
 const someCupcakes = [];
@@ -44,6 +44,8 @@ function CupcakeList() {
 
   const [allCupCake, setAllCupCake] = useState([]);
   const [accessories, setAccessories] = useState([]);
+  const [mesh, setMesh] = useState(0);
+  const [meshCupCake, setMeshCupCake] = useState([]);
   const GetAPI = async (request) => {
     try {
       const response = await fetch(request);
@@ -68,12 +70,19 @@ function CupcakeList() {
     const fetcheDataAccessories = async () => {
       const accessoriesData = await GetAPI(getAPIRequestAccessories);
       setAccessories(accessoriesData);
-    }
+    };
     fetcheDataAccessories();
   }, []);
-  console.info(accessories);
+  useEffect(() => {
+    if (mesh != 0) {
+      setMeshCupCake(
+        allCupCake.filter((element) => element.accessory_id === mesh)
+      );
+    } else {
+      setMeshCupCake(allCupCake);
+    }
+  }, [mesh]);
   // Step 5: create filter state
-
   return (
     <>
       <h1>My cupcakes</h1>
@@ -81,26 +90,32 @@ function CupcakeList() {
         <label htmlFor="cupcake-select">
           {/* Step 5: use a controlled component for select */}
           Filter by{" "}
-          <select id="cupcake-select">
-            <option value="">---</option>
-            {/* Step 4: add an option for each accessory */
+          <select id="cupcake-select" onChange={(e) => setMesh(e.target.value)}>
+            <option value="0">---</option>
+            {
+              /* Step 4: add an option for each accessory */
               accessories.map((element) => (
-                <option value={element.id} key={element}>{element.name}</option>
+                <option value={element.id} key={element.id}>
+                  {element.name}
+                </option>
               ))
             }
           </select>
         </label>
       </form>
       <ul className="cupcake-list" id="cupcake-list">
-        {/* Step 2: repeat this block for each cupcake */
-          allCupCake.map((element, index) => (
-            <li className="cupcake-item" key={element + index}>
-              <Cupcake data={element} />
-          </li>
-          ))
-        }
-        {/* Step 5: filter cupcakes before repeating */}
-        {/* end of block */}
+        {mesh === 0 /* Step 2: repeat this block for each cupcake */
+          ? allCupCake.map((element) => (
+              <li className="cupcake-item" key={element.id}>
+                <Cupcake data={element} />
+              </li>
+            ))
+          : /* Step 5: filter cupcakes before repeating */
+            meshCupCake.map((element) => (
+              <li className="cupcake-item" key={element.id}>
+                <Cupcake data={element} />
+              </li>
+            ))}
       </ul>
     </>
   );
