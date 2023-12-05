@@ -1,0 +1,30 @@
+{
+  "name": "js_checkpoint2",
+  "version": "4.1.2",
+  "description": "Checkpoint 2 the React-Express-MySQL cursus in Wild Code School",
+  "homepage": "https://github.com/wildcodeschool/js_checkpoint2#readme",
+  "bugs": {
+    "url": "https://github.com/wildcodeschool/js_checkpoint2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wildcodeschool/js_checkpoint2.git"
+  },
+  "scripts": {
+    "postinstall": "cross-env-shell \"husky install && cd ./frontend && npm install\"",
+    "dev": "cross-env-shell 'concurrently -c green,yellow -t \"HH:mm:ss\" -p \"{name} {time}\" \"npm:dev-*\"'",
+    "dev-front": "cross-env-shell \"cd ./frontend && npm run dev\"",
+    "dev-json-server": "json-server db.json --port 3310",
+    "lint": "lint-staged"
+  },
+  "keywords": [],
+  "author": "Wild Code School",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "cross-env": "^7.0.3",
+    "husky": "^8.0.3",
+    "json-server": "^0.17.4",
+    "lint-staged": "^13.2.3"
+  }
+}
